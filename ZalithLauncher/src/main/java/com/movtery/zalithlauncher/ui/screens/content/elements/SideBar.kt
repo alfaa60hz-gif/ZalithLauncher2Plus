@@ -75,6 +75,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.setting.AllSettings
+import com.movtery.zalithlauncher.setting.enums.DarkMode
+import com.movtery.zalithlauncher.ui.theme.isLauncherInDarkTheme
 import com.movtery.zalithlauncher.ui.screens.content.elements.backgroundGlass
 import com.movtery.zalithlauncher.ui.theme.cardColor
 import com.movtery.zalithlauncher.ui.theme.onCardColor
@@ -141,6 +143,9 @@ fun SideBar(
                     expanded = expanded,
                     onClick = { expanded = !expanded },
                     modifier = Modifier.align(Alignment.CenterEnd)
+                )
+                ThemeToggle(
+                    modifier = Modifier.align(Alignment.BottomCenter)
                 )
             }
         }
@@ -338,6 +343,40 @@ private fun SideBarShortcut(
                 style = MaterialTheme.typography.labelSmall,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 fontSize = 10.sp,
+                maxLines = 1
+            )
+        }
+    }
+}
+
+
+@Composable
+private fun ThemeToggle(modifier: Modifier = Modifier) {
+    val dark = isLauncherInDarkTheme()
+    Surface(
+        modifier = modifier
+            .padding(bottom = 6.dp)
+            .clip(RoundedCornerShape(14.dp))
+            .clickable {
+                AllSettings.launcherDarkMode.save(
+                    if (dark) DarkMode.Disable else DarkMode.Enable
+                )
+            },
+        shape = RoundedCornerShape(14.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f)
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = if (dark) "☾" else "☀",
+                fontSize = 14.sp
+            )
+            Text(
+                text = if (dark) "Dark" else "Light",
+                style = MaterialTheme.typography.labelSmall,
                 maxLines = 1
             )
         }
